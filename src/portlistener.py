@@ -158,10 +158,10 @@ def start_bottle(port_threads):
                 command = data_dict['command']
                 r = _device.sendCmd(command)
                 #
-                if not bool(r):
-                    status = httpStatusFailure
-                else:
+                if r:
                     status = httpStatusSuccess
+                else:
+                    status = httpStatusFailure
             else:
                 status = httpStatusBadrequest
             #

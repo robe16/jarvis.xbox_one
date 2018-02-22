@@ -16,9 +16,10 @@ class Xboxone():
     def __init__(self):
         #
         self._xboxIsOn = False
-        self.xboxSocket = self._create_socket()
         #
-        Process(target=self._check_power).start()
+        self._socket = self._create_socket()
+        #
+        Process(target=self._thread_check_power).start()
 
     def _create_socket(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -39,11 +40,13 @@ class Xboxone():
         power_header = b'\xdd\x02\x00' + chr(len(power_payload)).encode() + b'\x00\x00'
         return power_header + power_payload
 
-    def _send_power(self):
+    def _send_power_on(self):
         #
         try:
             data = self._power_payload()
-            self.xboxSocket.send(data)
+            #
+            self._socket.send(data)
+            #
             time.sleep(1)
             return True
         except Exception as e:
@@ -55,10 +58,12 @@ class Xboxone():
             return False
 
     def _send_ping(self):
-        self.xboxSocket.send(bytearray.fromhex(self._XBOX_PING))
-        result = select.select([self.xboxSocket], [], [], 5)[0]
+        s = self._create_socket()
+        s.send(bytearray.fromhex(self._XBOX_PING))
+        result = select.select([s], [], [], 5)[0]
+        s.close()
         #
-        r_pass = logPass if len(result) else logFail
+        # r_pass = logPass if len(result) else logFail
         #
         # Commented out log entry here as runs every 10 seconds
         # log_outbound(r_pass,
@@ -68,11 +73,10 @@ class Xboxone():
         return result
 
     def _check_power(self):
-        while True:
-            if len(self._send_ping()):
-                self._xboxIsOn = True
-            else:
-                self._xboxIsOn = False
+        if len(self._send_ping()):
+            self._xboxIsOn = True
+        else:
+            self._xboxIsOn = False
 
     def _thread_check_power(self):
         while True:
@@ -80,40 +84,26 @@ class Xboxone():
             time.sleep(10)  # 10 seconds
 
     def check_xbox_on(self):
+        self._check_power()
         return self._xboxIsOn
 
     def turn_on(self):
         #
-        if self.check_xbox_on():
-            #
-            log_outbound(self.check_xbox_on(),
-                         get_cfg_details_ip(), self._port, 'SOCKET', logDescDeviceTurnOn,
-                         '-', '-', 'n/a',
-                         description='Command not sent as device already on')
-            return True
-        #
         for i in range(0, 5):
-            self._send_power()
+            self._send_power_on()
+            result = self.check_xbox_on()
             #
-            log_outbound(self.check_xbox_on(),
+            log_outbound(result,
                          get_cfg_details_ip(), self._port, 'SOCKET', logDescDeviceTurnOn,
                          '-', '-', 'n/a',
                          description='Attempt number {count}'.format(count=i))
             #
-            if self.check_xbox_on():
+            if result:
                 return True
         #
         return False
 
     def turn_off(self):
-        #
-        if not self.check_xbox_on():
-            #
-            log_outbound(self.check_xbox_on(),
-                         get_cfg_details_ip(), self._port, 'SOCKET', logDescDeviceTurnOff,
-                         '-', '-', 'n/a',
-                         description='Command not sent as device already off')
-            return True
         #
         # TODO - turn off device
         #
