@@ -1,0 +1,17 @@
+{
+  "service_id": "lounge_xboxone",
+  "name_long": "Lounge Xbox One",
+  "name_short": "Xbox One",
+  "groups": [
+    "Lounge"
+  ],
+  "subservices": [],
+  "details": {
+    "ipaddress": "192.168.0.xxx",
+    "live_id": "FD123A45667C5098"
+  },
+  "port": {
+    "broadcast": 1030,
+    "listener": [1031, 1032, 1033, 1034]
+  }
+}
