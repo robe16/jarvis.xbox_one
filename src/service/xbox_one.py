@@ -105,11 +105,31 @@ class Xboxone():
         #
         return False
 
+    def turn_off(self):
+        #
+        if not self.check_xbox_on():
+            #
+            log_outbound(self.check_xbox_on(),
+                         get_cfg_details_ip(), self._port, 'SOCKET', logDescDeviceTurnOff,
+                         '-', '-', 'n/a',
+                         description='Command not sent as device already off')
+            return True
+        #
+        # TODO - turn off device
+        #
+        return False
+
+    def cmd_power(self):
+        if self.check_xbox_on():
+            return self.turn_off()
+        else:
+            return self.turn_on()
+
     def sendCmd(self, command):
         try:
             #
-            if command == 'powerOn':
-                r_pass = self.turn_on()
+            if command == 'power':
+                r_pass = self.cmd_power()
             else:
                 raise Exception('Requested command [{command}] not recognised'.format(command=command))
             #

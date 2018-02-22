@@ -7,4 +7,5 @@ logDesc_Broadcast = 'Broadcasting message'
 
 logDescDeviceGetPowerStatus = 'Get power status'
 logDescDeviceTurnOn = 'Power on device'
+logDescDeviceTurnOff = 'Power off device'
 logDescDeviceSendCommand = 'Send command'

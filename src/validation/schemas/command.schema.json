@@ -1,5 +1,5 @@
 {
   "type": "object",
-  "command": {"type" : "string", "enum": ["powerOn"]},
+  "command": {"type" : "string", "enum": ["power"]},
   "required": ["command"]
 }
