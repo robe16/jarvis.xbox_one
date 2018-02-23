@@ -116,7 +116,7 @@ def start_bottle(port_threads):
         #
         try:
             #
-            isOn = _device.check_xbox_on()
+            isOn = _device.power_status()
             #
             data = {'isOn': isOn}
             #

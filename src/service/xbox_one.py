@@ -88,7 +88,7 @@ class Xboxone():
         for i in range(0, 5):
             self._send_power_on()
             self._check_power()
-            result = self._xboxIsOn
+            result = self.power_status()
             #
             log_outbound(result,
                          get_cfg_details_ip(), self._port, 'SOCKET', logDescDeviceTurnOn,
@@ -106,8 +106,11 @@ class Xboxone():
         #
         return False
 
+    def power_status(self):
+        return self._xboxIsOn
+
     def cmd_power(self):
-        if self._xboxIsOn:
+        if self.power_status():
             return self.turn_off()
         else:
             return self.turn_on()
