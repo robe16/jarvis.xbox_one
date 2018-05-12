@@ -127,7 +127,12 @@ def start_bottle(port_threads):
             args['description'] = '-'
             log_inbound(**args)
             #
-            return HTTPResponse(body=data, status=status)
+            response = HTTPResponse()
+            response.status = status
+            response.body = data
+            enable_cors(response)
+            #
+            return response
             #
         except Exception as e:
             status = httpStatusServererror
@@ -170,7 +175,11 @@ def start_bottle(port_threads):
             args['description'] = '-'
             log_inbound(**args)
             #
-            return HTTPResponse(status=status)
+            response = HTTPResponse()
+            response.status = status
+            enable_cors(response)
+            #
+            return response
             #
         except Exception as e:
             status = httpStatusServererror
