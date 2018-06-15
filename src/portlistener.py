@@ -8,9 +8,9 @@ from resources.global_resources.log_vars import logPass
 from service.xbox_one import Xboxone
 from log.log import log_internal
 
-from apis.uri_config import get_config
-from apis.uri_get_powerstatus import get_powerstatus
-from apis.uri_post_command import post_command
+from apis.get_config import get_config
+from apis.get_powerstatus import get_powerstatus
+from apis.post_command import post_command
 
 
 def start_bottle(port_threads):
