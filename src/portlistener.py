@@ -35,7 +35,6 @@ def start_bottle(port_threads):
     def api_get_powerstatus():
         return get_powerstatus(request, _xbox)
 
-
     @post('/command')
     def api_post_command():
         return post_command(request, _xbox)
