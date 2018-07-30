@@ -1,7 +1,7 @@
-from bottle import get, post
-from bottle import request, run
+from bottle import request, run, route, get, post
 
 from config.config import get_cfg_port
+from common_functions.request_enable_cors import response_options
 from resources.lang.enGB.logs import *
 from resources.global_resources.log_vars import logPass
 from service.xbox_one import Xboxone
@@ -26,17 +26,26 @@ def start_bottle():
     # APIs
     ################################################################################################
 
+    @route('/config', method=['OPTIONS'])
+    @route('/powerstatus', method=['OPTIONS'])
+    @route('/command', method=['OPTIONS'])
+    def api_cors_options(**kwargs):
+        return response_options()
+
     @get('/config')
     def api_get_config():
-        return get_config(request)
+        response = get_config(request)
+        return response
 
     @get('/powerstatus')
     def api_get_powerstatus():
-        return get_powerstatus(request, _xbox)
+        response = get_powerstatus(request, _xbox)
+        return response
 
     @post('/command')
     def api_post_command():
-        return post_command(request, _xbox)
+        response = post_command(request, _xbox)
+        return response
 
     ################################################################################################
 
