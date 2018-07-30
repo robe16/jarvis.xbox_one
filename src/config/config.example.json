@@ -10,8 +10,5 @@
     "ipaddress": "192.168.0.xxx",
     "live_id": "FAD123A45667A5098"
   },
-  "port": {
-    "broadcast": 1030,
-    "listener": [1031, 1032, 1033, 1034]
-  }
+  "port": 1030
 }
